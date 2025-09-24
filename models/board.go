@@ -22,7 +22,7 @@ func (board *Board) MoveTask(id string, newStatus string) {
 	task := board.Tasks[id]
 
 	if task.Status != newStatus {
-		task.editStatus(newStatus)
+		task.EditStatus(newStatus)
 	}
 }
 

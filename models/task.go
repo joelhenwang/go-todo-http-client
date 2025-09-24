@@ -7,7 +7,7 @@ type Task struct {
 	Status      string `json:"status"`
 }
 
-func newTask(title string, desc string) *Task {
+func NewTask(title string, desc string) *Task {
 	return &Task{
 		Id:          title,
 		Title:       title,
@@ -16,14 +16,14 @@ func newTask(title string, desc string) *Task {
 	}
 }
 
-func (task *Task) editTitle(title string) {
+func (task *Task) EditTitle(title string) {
 	task.Title = title
 }
 
-func (task *Task) editDescription(desc string) {
+func (task *Task) EditDescription(desc string) {
 	task.Description = desc
 }
 
-func (task *Task) editStatus(newStatus string) {
+func (task *Task) EditStatus(newStatus string) {
 	task.Status = newStatus
 }

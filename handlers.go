@@ -23,6 +23,8 @@ func GetHandlers(board *models.Board) []Handler {
 		GetTasks(board),
 		GetTaskById(board),
 		PostNewTask(board),
+		EditTaskById(board),
+		DeleteTaskById(board),
 	}
 }
 
@@ -50,6 +52,35 @@ func GetTaskById(board *models.Board) Handler {
 			}
 
 			writeJson(w, 200, task)
+		},
+	}
+}
+
+func EditTaskById(board *models.Board) Handler {
+	return Handler{
+		url: "POST /task/{id}/edit",
+		handler: func(w http.ResponseWriter, r *http.Request) {
+			id := r.PathValue("id")
+			task, ok := board.Tasks[id]
+
+			if !ok {
+				writeError(w, http.StatusNotFound, fmt.Sprintf("Task with id (%s) not found...", id))
+				return
+			}
+
+			var newTask models.Task
+
+			if err := decodeJson(w, r, &newTask); err != nil {
+				writeError(w, http.StatusBadRequest, fmt.Sprintf("Error decoding Task model: %s", err.Error()))
+				return
+			}
+
+			// Option 2: Using the existing methods
+			task.EditTitle(newTask.Title)
+			task.EditDescription(newTask.Description)
+			task.EditStatus(newTask.Status)
+
+			writeJson(w, http.StatusOK, task)
 		},
 	}
 }
@@ -114,11 +145,11 @@ func decodeJson(w http.ResponseWriter, r *http.Request, dst interface{}) error {
 	dec.DisallowUnknownFields()
 
 	if err := dec.Decode(dst); err != nil {
-		return fmt.Errorf("Error decoding json: %w", err)
+		return fmt.Errorf("error decoding json: %w", err)
 	}
 
 	if dec.More() {
-		return fmt.Errorf("Multiple json object found in body")
+		return fmt.Errorf("multiple json object found in body")
 	}
 
 	return nil
