@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
+	"github.com/joelhenwang/go-todo-http-client/db"
 	"github.com/joelhenwang/go-todo-http-client/models"
 )
 
@@ -27,6 +29,11 @@ func main() {
 		Addr:    ":8000",
 		Handler: mux,
 	}
+
+	db_conn := db.Init()
+	defer db_conn.Close(context.Background())
+
+	db.TestQueries(db_conn)
 
 	fmt.Printf("Server starting at: %s", server.Addr)
 	if err := server.ListenAndServe(); err != http.ErrServerClosed {
