@@ -5,14 +5,18 @@ type Task struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Status      string `json:"status"`
+	Priority    string `json:"priority"`
+	BoardId     string `json:"boardId"`
 }
 
-func NewTask(title string, desc string) *Task {
+func NewTask(title string, desc string, priority string, boardId string) *Task {
 	return &Task{
 		Id:          title,
 		Title:       title,
 		Description: desc,
 		Status:      "To Do",
+		Priority:    priority,
+		BoardId:     boardId,
 	}
 }
 
@@ -26,4 +30,8 @@ func (task *Task) EditDescription(desc string) {
 
 func (task *Task) EditStatus(newStatus string) {
 	task.Status = newStatus
+}
+
+func (task *Task) EditPriority(newPriority string) {
+	task.Priority = newPriority
 }

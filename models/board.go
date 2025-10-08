@@ -26,6 +26,12 @@ func (board *Board) MoveTask(id string, newStatus string) {
 	}
 }
 
+func (board *Board) EditTaskDescription(id string, newDescription string) {
+	task := board.Tasks[id]
+
+	task.EditDescription(newDescription)
+}
+
 func (board *Board) DeleteTask(id string) {
 	delete(board.Tasks, id)
 }
